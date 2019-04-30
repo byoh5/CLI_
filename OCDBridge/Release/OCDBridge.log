@@ -1,0 +1,21 @@
+﻿빌드 시작: 2019-04-30 오후 5:12:03
+     1>2 노드의 "D:\EYENIX\DEV\JTAG_Lib\CLI_\OCDBridge\OCDBridge.vcxproj" 프로젝트(Build 대상)입니다.
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ID:\EYENIX\DEV\JTAG_Lib\CLI_\CLI /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yc"stdafx.h" /Fp"Release\OCDBridge.pch" /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+         stdafx.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ID:\EYENIX\DEV\JTAG_Lib\CLI_\CLI /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Release\OCDBridge.pch" /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt OCDBridge.cpp
+         OCDBridge.cpp
+     1>OCDBridge.cpp(215): warning C4101: 'i' :참조되지 않은 지역 변수입니다.
+     1>OCDBridge.cpp(270): warning C4101: 'dwThreadID0_B' :참조되지 않은 지역 변수입니다.
+     1>OCDBridge.cpp(298): warning C4309: '=' : 상수 값이 잘립니다.
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\EYENIX\DEV\JTAG_Lib\CLI_\Release\OCDBridge.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:D:\EYENIX\DEV\JTAG_Lib\CLI_\Release CLI.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\EYENIX\DEV\JTAG_Lib\CLI_\Release\OCDBridge.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\EYENIX\DEV\JTAG_Lib\CLI_\Release\OCDBridge.lib" /MACHINE:X86 /SAFESEH Release\OCDBridge.obj
+         Release\stdafx.obj
+         코드를 생성하고 있습니다.
+         코드를 생성했습니다.
+         OCDBridge.vcxproj -> D:\EYENIX\DEV\JTAG_Lib\CLI_\Release\OCDBridge.exe
+     1>"D:\EYENIX\DEV\JTAG_Lib\CLI_\OCDBridge\OCDBridge.vcxproj" 프로젝트를 빌드했습니다(Build 대상).
+
+빌드했습니다.
+
+경과 시간: 00:00:01.35
