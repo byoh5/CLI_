@@ -204,7 +204,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	for (i = 0; i < cnt; i++){
 		printf("ROUND:%d\n", i);
 
-		fd_data = NetCon("localhost", "5556");
+		fd_data = NetCon("localhost", "5557");
 
 		for (n = 0; n < 300; n++){
 			val[n] = n;

@@ -204,7 +204,7 @@ DWORD WINAPI Thread_ReadFromECM(void *arg)
 
 
 
-#define ECM_CONNECT_PORT 5556
+#define ECM_CONNECT_PORT 5557
 int server_port = ECM_CONNECT_PORT;
 
 DWORD WINAPI ThreadAFunc(void *arg)
