@@ -231,12 +231,14 @@ int _tmain(int argc, _TCHAR* argv[])
 		result = (double)(clock() - before) / CLOCKS_PER_SEC;
 		printf("TIME : %f\n", result);
 #else
+
+#define SEND_SIZE 1024*20
 		before = clock();
 		for (n = 0; n < 256; n++){
-			getDataRSP_(fd_data, 0xa0000000, 1024, (void*)val_2);
+			getDataRSP_(fd_data, 0xa0000000, SEND_SIZE, (void*)val_2);
 		}
 		result = (double)(clock() - before) / CLOCKS_PER_SEC;
-		printf("TIME : %f , Byte per Second %f \n", result, (double)(1024 * 256) / result);
+		printf("TIME : %f , Byte per Second %f \n", result, (double)(SEND_SIZE * 256) / result);
 #endif
 
 
