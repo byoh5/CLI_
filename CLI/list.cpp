@@ -1,5 +1,5 @@
-#include "list.h"
-#include <iostream>
+//#include "list.h"
+//#include <iostream>
 #include "stdafx.h"
 #include "stdio.h"
 #include "stdlib.h"

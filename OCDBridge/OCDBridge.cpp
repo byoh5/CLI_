@@ -4,15 +4,15 @@
 #include "stdafx.h"
 #include "CLI.h"
 
-#include <stdio.h>
-#include <stdlib.h>
+//#include <stdio.h>
+//#include <stdlib.h>
 //#include <winsock2.h>
-#include <ws2tcpip.h>
-#include <fstream>
-#include <time.h>
-#include <process.h>
+//#include <ws2tcpip.h>
+//#include <fstream>
+//#include <time.h>
+//#include <process.h>
 #include <windows.h>
-#include <synchapi.h>
+//#include <synchapi.h>
 
 #pragma comment (lib, "Ws2_32.lib")
 #pragma comment (lib, "Mswsock.lib")
@@ -28,20 +28,6 @@ enum {
 	eESC_DageSend = 0x00000002
 };
 
-UINT32 EscapeLoop_(UINT32 val){
-	//	rprintf("Loop Flag return to %d\n", loopflag);
-	return (loopflagbit & val);
-}
-void EscapeLoopSet_(UINT32 val){
-	//	EnterCriticalSection(&CriticalSection);
-	loopflagbit |= val;
-	//	LeaveCriticalSection(&CriticalSection);
-}
-void EscapeLoopUnSet_(UINT32 val){
-	//	EnterCriticalSection(&CriticalSection);
-	loopflagbit &= ~val;
-	//	LeaveCriticalSection(&CriticalSection);
-}
 
 
 void hexDump(char *desc, void *addr, int len) {
@@ -97,7 +83,7 @@ unsigned char check_sum_256(char* buf, int size){
 	return val;
 }
 
-#define SENDSIZE 1024*100
+#define SENDSIZE 1024*512
 
 #pragma warning(disable: 4996)
 
@@ -109,15 +95,15 @@ DWORD WINAPI Thread_ReadFromOCD(void *arg)
 	pcli_fd = (SOCKET*)arg;
 	cli_fd = *pcli_fd;
 	int ret;
-	char cmd[SENDSIZE + 10];
+	char cmd[SENDSIZE];
 	//	char testbuf[100] = { 0, };
 	char* start = 0;
 	char* end = 0;
 	while (1)
 	{
-
-		Sleep(10);
-		ret = recv(gfd_ocd, cmd, SENDSIZE, 0);
+		cmd[0] = 0;
+		
+		ret = recv(gfd_ocd, cmd, SENDSIZE-1, 0);
 
 		if (ret > 0){
 			cmd[ret] = 0;
@@ -129,8 +115,8 @@ DWORD WINAPI Thread_ReadFromOCD(void *arg)
 			//	printf("Escape\n");
 			break;
 		}
-		cmd[0] = 0;
-
+		
+		Sleep(1);
 
 	}
 	//	printf("Kill Thread_ReadFromOCD\n");
@@ -146,7 +132,7 @@ DWORD WINAPI Thread_ReadFromECM(void *arg)
 	pcli_fd = (SOCKET*)arg;
 	cli_fd = *pcli_fd;
 	int ret;
-	char cmd[SENDSIZE + 10];
+	char cmd[SENDSIZE];
 	DWORD dwThreadID0_B;
 	static int sritical = 0;
 
@@ -154,10 +140,10 @@ DWORD WINAPI Thread_ReadFromECM(void *arg)
 
 	while (1)
 	{
-		Sleep(10);
+		cmd[0] = 0;
 
 
-		ret = recv(cli_fd, cmd, SENDSIZE, 0);
+		ret = recv(cli_fd, cmd, SENDSIZE-1, 0);
 
 		if (ret > 0){
 			cmd[ret] = 0;
@@ -195,7 +181,8 @@ DWORD WINAPI Thread_ReadFromECM(void *arg)
 
 		}
 
-		cmd[0] = 0;
+		
+		Sleep(1);
 	}
 
 	return 0;
@@ -212,7 +199,7 @@ DWORD WINAPI ThreadAFunc(void *arg)
 	WSADATA wsa;
 	SOCKET master, new_socket;
 	struct sockaddr_in server, address;
-	int addrlen, i;
+	int addrlen;
 
 
 	printf("\nInitialising Winsock...");
@@ -267,7 +254,7 @@ DWORD WINAPI ThreadAFunc(void *arg)
 		//inform user of socket number - used in send and receive commands
 		printf("New connection , socket fd is %d , ip is : %s , port : %d \n", new_socket, inet_ntoa(address.sin_addr), ntohs(address.sin_port));
 
-		DWORD dwThreadID0_A, dwThreadID0_B;
+		DWORD dwThreadID0_A;
 		HANDLE CliThread_A = CreateThread(NULL, 0, Thread_ReadFromECM, (LPVOID)&new_socket, 0, &dwThreadID0_A);
 
 
@@ -293,11 +280,9 @@ int _tmain(int argc, _TCHAR* argv[])
 	int i = 0;
 	int n = 0;
 	int len = 0;
-	char* val = (char*)malloc(SENDSIZE);
-	char* val_2 = (char*)malloc(SENDSIZE);
-	val[0] = 0xab;
-	char buf[SENDSIZE] = { 0, 0 };
-	char buf_new[SENDSIZE] = { 0, 0 };
+	char data[8] = { 0, 0 };
+	
+
 	BYTE checksumval = 0;
 	SOCKET new_socket;
 
@@ -307,33 +292,15 @@ int _tmain(int argc, _TCHAR* argv[])
 	printf("ROUND:%d\n", i);
 
 	gfd_ocd = NetCon("localhost", "3333");
-	getDataRSP_(gfd_ocd, 0xa0000000, 4, (void*)val_2);
+	getDataRSP_(gfd_ocd, 0xa0000000, 4, (void*)data);
 
 	DWORD dwThreadID0;
 	HANDLE CliThread = CreateThread(NULL, 0, ThreadAFunc, (LPVOID)&new_socket, 0, &dwThreadID0);
 
 
-	/*
-	for (n = 0; n < 300; n++){
-	val[n] = n;
-	}
-
-	setDataRSP_(fd_data, 0xa0000000,300, (void*)val);
-
-	for (n = 0; n < 1000; n++){
-	getDataRSP_(fd_data, 0xa0000000, 500, (void*)val_2);
-	}
-
-	hexDump("READ", val_2, 500);
-
-
-	NetClo(fd_data);
-	*/
-	//	}
-
 	printf("Finish!");
 	while (1){
-		Sleep(1000);
+		Sleep(1);
 	}
 	DeleteCriticalSection(&CriticalSection);
 	return 0;

@@ -1,17 +1,16 @@
-﻿빌드 시작: 2019-05-02 오후 4:56:17
-     1>2 노드의 "D:\EYENIX\DEV\JTAG_Lib\CLI_\OCDBridge\OCDBridge.vcxproj" 프로젝트(Build 대상)입니다.
+﻿빌드 시작: 2019-05-21 오후 4:41:12
+     1>2 노드의 "D:\EYENIX\DEV\JTAG_Lib\CLI_new\CLI_\OCDBridge\OCDBridge.vcxproj" 프로젝트(Rebuild 대상)입니다.
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ID:\EYENIX\DEV\JTAG_Lib\CLI_\CLI /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\OCDBridge.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt OCDBridge.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ID:\EYENIX\DEV\JTAG_Lib\CLI_new\CLI_\CLI /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"stdafx.h" /Fp"Debug\OCDBridge.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+         stdafx.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ID:\EYENIX\DEV\JTAG_Lib\CLI_new\CLI_\CLI /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\OCDBridge.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt OCDBridge.cpp
          OCDBridge.cpp
-     1>d:\eyenix\dev\jtag_lib\cli_\ocdbridge\ocdbridge.cpp(215): warning C4101: 'i' :참조되지 않은 지역 변수입니다.
-     1>d:\eyenix\dev\jtag_lib\cli_\ocdbridge\ocdbridge.cpp(270): warning C4101: 'dwThreadID0_B' :참조되지 않은 지역 변수입니다.
-     1>d:\eyenix\dev\jtag_lib\cli_\ocdbridge\ocdbridge.cpp(298): warning C4309: '=' : 상수 값이 잘립니다.
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\EYENIX\DEV\JTAG_Lib\CLI_\Debug\OCDBridge.exe" /INCREMENTAL /NOLOGO /LIBPATH:D:\EYENIX\DEV\JTAG_Lib\CLI_\Debug CLI.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\EYENIX\DEV\JTAG_Lib\CLI_\Debug\OCDBridge.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\EYENIX\DEV\JTAG_Lib\CLI_\Debug\OCDBridge.lib" /MACHINE:X86 Debug\OCDBridge.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\EYENIX\DEV\JTAG_Lib\CLI_new\CLI_\Debug\OCDBridge.exe" /INCREMENTAL /NOLOGO /LIBPATH:D:\EYENIX\DEV\JTAG_Lib\CLI_new\CLI_\Debug CLI.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\EYENIX\DEV\JTAG_Lib\CLI_new\CLI_\Debug\OCDBridge.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\EYENIX\DEV\JTAG_Lib\CLI_new\CLI_\Debug\OCDBridge.lib" /MACHINE:X86 Debug\OCDBridge.obj
          Debug\stdafx.obj
-         OCDBridge.vcxproj -> D:\EYENIX\DEV\JTAG_Lib\CLI_\Debug\OCDBridge.exe
-     1>"D:\EYENIX\DEV\JTAG_Lib\CLI_\OCDBridge\OCDBridge.vcxproj" 프로젝트를 빌드했습니다(Build 대상).
+         OCDBridge.vcxproj -> D:\EYENIX\DEV\JTAG_Lib\CLI_new\CLI_\Debug\OCDBridge.exe
+     1>"D:\EYENIX\DEV\JTAG_Lib\CLI_new\CLI_\OCDBridge\OCDBridge.vcxproj" 프로젝트를 빌드했습니다(Rebuild 대상).
 
 빌드했습니다.
 
-경과 시간: 00:00:01.43
+경과 시간: 00:00:00.73

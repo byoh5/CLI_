@@ -84,7 +84,7 @@ CLI_API int NetCon(char* addr, char* port)
 		}
 		break;
 	}
-#if 0
+#if 1
 	// Receive Time Out 
 	int nTimeoutValue = 5000;
 	iResult = setsockopt(con_sock, SOL_SOCKET, SO_RCVTIMEO, (const char*)&nTimeoutValue, sizeof(nTimeoutValue));
@@ -133,7 +133,7 @@ CLI_API int NetClo(int fd)
 
 
 
-CLI_API int getImagefromRemote(int fd, int cnt){
+CLI_API int getImagefromRemote(int fd,  int cnt){
 	//NetConn(0, NULL);
 
 	int iResult;
@@ -145,7 +145,7 @@ CLI_API int getImagefromRemote(int fd, int cnt){
 	int recvbuflen = DEFAULT_BUFLEN;
 	char* buf = NULL;
 	FILE*	pFile = NULL;
-	int size = 0;
+	UINT size = 0;
 	UINT retry = 0;
 	int err = 1;
 
@@ -223,7 +223,7 @@ CLI_API int deleteList_ALL(void){
 	return 0;
 }
 
-CLI_API int getDataFromRemote(int fd, int addr, int size,int module ,void* value)
+CLI_API int getDataFromRemote(int fd, int addr,  int size, int module, void* value)
 {
 	clock_t before;
 	double result;
@@ -282,7 +282,7 @@ CLI_API int getDataFromRemote(int fd, int addr, int size,int module ,void* value
 	return 0;
 }
 
-#define SIZEOFSENDBUF 1024*100
+//#define SIZEOFSENDBUF DEFAULT_BUFLEN  //DEFAULT_BUFLEN+128  //1024*100 
 unsigned char check_sum_256(char* buf, int size){
 	unsigned char val = 0;
 	int i = 0;
@@ -293,7 +293,7 @@ unsigned char check_sum_256(char* buf, int size){
 	return val;
 }
 
-void chage_ascii2dat(char* inbuf, int size,char* outbuf){
+void chage_ascii2dat(char* inbuf, unsigned int size, char* outbuf){
 	char* bufP;
 	char temp[10];
 	int i = 0;
@@ -303,15 +303,15 @@ void chage_ascii2dat(char* inbuf, int size,char* outbuf){
 		strncpy(temp, bufP, 2);
 		temp[2] = 0;
 	//	printf("%02s\n", temp);
-		outbuf[i] = strtoul(temp, NULL, 16);
+		outbuf[i] =(char) strtoul(temp, NULL, 16);
 		bufP += 2;
 	}
 
 }
 
-void chage_dat2ascii(char* inbuf, int size, char* outbuf){
+void chage_dat2ascii(char* inbuf, unsigned int size, char* outbuf){
 	unsigned char* bufP;
-	char temp[10];
+//	char temp[10];
 	int i = 0;
 	char* obufP;
 	bufP =(unsigned char*) inbuf;
@@ -323,25 +323,23 @@ void chage_dat2ascii(char* inbuf, int size, char* outbuf){
 	*obufP = 0;
 }
 
-CLI_API int getDataRSP_(int fd, int addr, int size, void* value)
+#define GETDATASENDBUF 1024
+CLI_API int getDataRSP_(int fd, int addr, unsigned int size, void* value)
 {
 	clock_t before;
 	double result;
 	before = clock();
-	char buf[SIZEOFSENDBUF] = { 0, 0 };
-	char buf_new[SIZEOFSENDBUF] = { 0, 0 };
+	char* buf = (char*)malloc(GETDATASENDBUF);
+	char* buf_new = (char*)malloc(GETDATASENDBUF);
+	char* recvbuf = (char*)malloc( (size*2) + GETDATASENDBUF);
 
-	sprintf(buf, "m%08x,%02x",addr,size);
-	int len = 0;
-	int checksumval = 0;
-	len = strlen(buf);
+	sprintf(buf, "m%08x,%08x",addr,size);
+	int checksumval = 0;	
 	checksumval = check_sum_256(buf, strlen(buf));
-
 	sprintf(buf_new, "$%s#%02x", buf, checksumval);
-
 	send(fd, buf_new, strlen(buf_new), 0);
 
-	char recvbuf[DEFAULT_BUFLEN];
+	
 	char* recvP;
 	int iResult = 0;
 	
@@ -354,17 +352,20 @@ CLI_API int getDataRSP_(int fd, int addr, int size, void* value)
 
 	while (1){
 		
-		iResult = recv(fd, recvP, DEFAULT_BUFLEN, 0);
+		iResult = recv(fd, recvP, (size * 2 + GETDATASENDBUF) - 1, 0);
 //		printf("iResult<%8d>\n", iResult);
 		
 		if (iResult > 0){
 			recvP[iResult] = 0;
-			printf("RECV[%s]\n", recvP);
+//			printf("RECV[%s]\n", recvP);
 			if ((start = strchr(recvbuf,'$')) && (end=  strchr(recvbuf,'#')) ){ 
 				send(fd, "+", 1, 0);
 
 				chage_ascii2dat(start+1, (end - start) - 1, (char*)value);
 				recvP[0] = 0;
+				free(buf);
+				free(buf_new);
+				free(recvbuf);
 				return 0;
 			}
 			recvP += iResult;
@@ -379,35 +380,38 @@ CLI_API int getDataRSP_(int fd, int addr, int size, void* value)
 	}
 	result = (double)(clock() - before) / CLOCKS_PER_SEC;
 	printf("%f\n", result);
+
+	free(buf);
+	free(buf_new);
+	free(recvbuf);
 	return 0;
 }
 
-
-CLI_API int setDataRSP_(int fd, int addr, int size, void* value)
+#define SENDMSGBUF     1024
+#define SETDATASENDBUF DEFAULT_BUFLEN+SENDMSGBUF
+CLI_API int setDataRSP_(int fd, int addr, unsigned int size, void* value)
 {
 	clock_t before;
 	double result;
 	before = clock();
-	char buf[SIZEOFSENDBUF] = { 0, 0 };
-	char buf_new[SIZEOFSENDBUF] = { 0, 0 };
-	char databuf[SIZEOFSENDBUF * 2] = { 0, 0 };
-
+	char* msgbuf = (char*)malloc((size * 2) + SENDMSGBUF);
+	char* buf_new = (char*)malloc((size * 2) + SENDMSGBUF);
+	char* databuf = (char*)malloc(size * 2);
+	char* recvbuf = (char*)malloc(DEFAULT_BUFLEN);
 
 	chage_dat2ascii((char*)value, size, databuf);
 
-	sprintf(buf, "M%08x,%02x:%s", addr, size, databuf);
+	sprintf(msgbuf, "M%08x,%02x:%s", addr, size, databuf);
 //	
 	int len = 0;
 	int checksumval = 0;
-	len = strlen(buf);
-	checksumval = check_sum_256(buf, strlen(buf));
+	len = strlen(msgbuf);
+	checksumval = check_sum_256(msgbuf, strlen(msgbuf));
 
-	sprintf(buf_new, "$%s#%02x", buf, checksumval);
+	sprintf(buf_new, "$%s#%02x", msgbuf, checksumval);
 
 	send(fd, buf_new, strlen(buf_new), 0);
 
-	
-	char recvbuf[DEFAULT_BUFLEN];
 	char* recvP;
 	int iResult = 0;
 
@@ -420,15 +424,19 @@ CLI_API int setDataRSP_(int fd, int addr, int size, void* value)
 
 	while (1){
 
-		iResult = recv(fd, recvP, DEFAULT_BUFLEN, 0);
+		iResult = recv(fd, recvP, DEFAULT_BUFLEN-1, 0);
 //		printf("iResult<%8d>\n", iResult);
 
 		if (iResult > 0){
 			recvP[iResult] = 0;
-			printf("RECV[%s]\n", recvP);
+//			printf("RECV[%s]\n", recvP);
 			if ((start = strchr(recvbuf, 'O')) && (start = strchr(recvbuf, 'K'))){
 				send(fd, "+", 1, 0);
 				recvP[0] = 0;
+				free(msgbuf);
+				free(buf_new);
+				free(databuf);
+				free(recvbuf);
 				return 0;
 			}
 			recvP += iResult;
@@ -436,6 +444,10 @@ CLI_API int setDataRSP_(int fd, int addr, int size, void* value)
 		else{
 
 //			printf("iResult %d", iResult);
+			free(msgbuf);
+			free(buf_new);
+			free(databuf);
+			free(recvbuf);
 			return -1;
 		}
 
@@ -443,6 +455,10 @@ CLI_API int setDataRSP_(int fd, int addr, int size, void* value)
 	}
 	result = (double)(clock() - before) / CLOCKS_PER_SEC;
 	printf("%f\n", result);
+	free(msgbuf);
+	free(buf_new);
+	free(databuf);
+	free(recvbuf);
 	return 0;
 }
 
@@ -474,7 +490,7 @@ int AckFromRemote(int fd, char* str)
 
 }
 
-CLI_API int setDataFromRemote(int fd, int addr, int size,int module ,void* value)
+CLI_API int setDataFromRemote(int fd, int addr,  int size,int module ,void* value)
 {
 	UINT32 iResult;
 	char instr[MAX_IN_STRING] = { 0, 0 };

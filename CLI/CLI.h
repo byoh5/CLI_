@@ -24,8 +24,8 @@ extern "C" {
 	CLI_API int getDataFromRemote(int fd, int addr, int size, int module, void* value);
 	CLI_API int setDataFromRemote(int fd, int addr, int size, int module, void* value);
 	CLI_API int sendMsg(int fd, char* msg);
-	CLI_API int getDataRSP_(int fd, int addr, int size, void* value);
-	CLI_API int setDataRSP_(int fd, int addr, int size, void* value);
+	CLI_API int getDataRSP_(int fd, int addr, unsigned int size, void* value);
+	CLI_API int setDataRSP_(int fd, int addr, unsigned int size, void* value);
 #ifdef __cplusplus
 }
 #endif

@@ -68,7 +68,6 @@ unsigned char check_sum_256(char* buf, int size){
 	return val;
 }
 
-#define SENDSIZE 1024*100
 
 #pragma warning(disable: 4996)
 
@@ -114,7 +113,7 @@ DWORD WINAPI ThreadAFunc(void *arg)
 	WSADATA wsa;
 	SOCKET master, new_socket;
 	struct sockaddr_in server, address;
-	int addrlen, i;
+	int addrlen;
 
 
 	printf("\nInitialising Winsock...");
@@ -181,7 +180,7 @@ DWORD WINAPI ThreadAFunc(void *arg)
 	return TRUE;
 }
 
-
+#define SEND_SIZE 1024*(1024) *10
 int _tmain(int argc, _TCHAR* argv[])
 {
 
@@ -193,11 +192,10 @@ int _tmain(int argc, _TCHAR* argv[])
 	unsigned int n = 0;
 	int k = 0;
 	int len = 0;
-	unsigned char* val = (unsigned char*)malloc(SENDSIZE);
-	unsigned char* val_2 = (unsigned char*)malloc(SENDSIZE);
+	unsigned char* val = (unsigned char*)malloc(SEND_SIZE);
+	unsigned char* val_2 = (unsigned char*)malloc(SEND_SIZE);
 	val[0] = 0xab;
-	char buf[SENDSIZE] = { 0, 0 };
-	char buf_new[SENDSIZE] = { 0, 0 };
+	
 	BYTE checksumval = 0;
 	clock_t before;
 
@@ -215,7 +213,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	//	Sleep(1000);
 	//	getDataRSP_(fd_data, 0xa0000000, 125, (void*)val_2);
 	//	setDataRSP_(fd_data, 0xa0000000,8, (void*)val);
-		setDataRSP_(fd_data, 0xa0000000, 256, (void*)val);
+	//	setDataRSP_(fd_data, 0xa0000000, 256, (void*)val);
 #if 0
 		before = clock();
 
@@ -232,17 +230,22 @@ int _tmain(int argc, _TCHAR* argv[])
 		printf("TIME : %f\n", result);
 #else
 
-#define SEND_SIZE 1024*20
+
+#define ROUND_TEST 1024*1024
 		before = clock();
-		for (n = 0; n < 256; n++){
-			getDataRSP_(fd_data, 0xa0000000, SEND_SIZE, (void*)val_2);
+		for (n = 0; n < ROUND_TEST; n++){
+			before = clock();
+			getDataRSP_(fd_data, 0xa0000000, n, (void*)val_2);
+			result = (double)(clock() - before) / CLOCKS_PER_SEC;
+			printf("TIME : %f , Byte per Second %f \n", result, (double)(n) / result);
 		}
-		result = (double)(clock() - before) / CLOCKS_PER_SEC;
-		printf("TIME : %f , Byte per Second %f \n", result, (double)(SEND_SIZE * 256) / result);
+		
 #endif
 
 
 		sendMsg(fd_data, "EXIT");
+
+	
 		hexDump("READ", val_2, 10);
 	
 
@@ -250,6 +253,10 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 	
 	printf("Finish!");
+
+	free(val);
+	free(val_2);
+
 	while (1){
 		Sleep(1000);
 	}
