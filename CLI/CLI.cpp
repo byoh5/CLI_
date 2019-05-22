@@ -371,9 +371,11 @@ CLI_API int getDataRSP_(int fd, int addr, unsigned int size, void* value)
 			recvP += iResult;
 		}
 		else{
-
-//			printf("iResult %d", iResult);
-			//return -1;
+			printf("Error getDataRSP_ recv %d", iResult);
+			free(buf);
+			free(buf_new);
+			free(recvbuf);
+			return -1;
 		}
 
 		Sleep(1);
@@ -396,7 +398,7 @@ CLI_API int setDataRSP_(int fd, int addr, unsigned int size, void* value)
 	before = clock();
 	char* msgbuf = (char*)malloc((size * 2) + SENDMSGBUF);
 	char* buf_new = (char*)malloc((size * 2) + SENDMSGBUF);
-	char* databuf = (char*)malloc(size * 2);
+	char* databuf = (char*)malloc((size * 2) + SENDMSGBUF);
 	char* recvbuf = (char*)malloc(DEFAULT_BUFLEN);
 
 	chage_dat2ascii((char*)value, size, databuf);
@@ -406,6 +408,7 @@ CLI_API int setDataRSP_(int fd, int addr, unsigned int size, void* value)
 	int len = 0;
 	int checksumval = 0;
 	len = strlen(msgbuf);
+
 	checksumval = check_sum_256(msgbuf, strlen(msgbuf));
 
 	sprintf(buf_new, "$%s#%02x", msgbuf, checksumval);
@@ -443,7 +446,7 @@ CLI_API int setDataRSP_(int fd, int addr, unsigned int size, void* value)
 		}
 		else{
 
-//			printf("iResult %d", iResult);
+			printf("Error setDataRSP_ recv %d", iResult);
 			free(msgbuf);
 			free(buf_new);
 			free(databuf);

@@ -3,16 +3,8 @@
 
 #include "stdafx.h"
 #include "CLI.h"
-
-//#include <stdio.h>
-//#include <stdlib.h>
-//#include <winsock2.h>
-//#include <ws2tcpip.h>
-//#include <fstream>
-//#include <time.h>
-//#include <process.h>
 #include <windows.h>
-//#include <synchapi.h>
+
 
 #pragma comment (lib, "Ws2_32.lib")
 #pragma comment (lib, "Mswsock.lib")
@@ -273,32 +265,23 @@ DWORD WINAPI ThreadAFunc(void *arg)
 int _tmain(int argc, _TCHAR* argv[])
 {
 
-	int fd = 0;
-
-	int cnt = 1;
-	int result = 0;
-	int i = 0;
-	int n = 0;
-	int len = 0;
 	char data[8] = { 0, 0 };
 	
-
-	BYTE checksumval = 0;
-	SOCKET new_socket;
-
 	if (!InitializeCriticalSectionAndSpinCount(&CriticalSection, 0x00000400)) return 0;
 
-	//	for (i = 0; i < cnt; i++){
-	printf("ROUND:%d\n", i);
-
 	gfd_ocd = NetCon("localhost", "3333");
-	getDataRSP_(gfd_ocd, 0xa0000000, 4, (void*)data);
+	if (gfd_ocd == -1){
+		printf("NetCon Error!\n");
+		return 0;
+	}
+	if (getDataRSP_(gfd_ocd, 0xa0000000, 4, (void*)data) == -1){
+		printf("getDataRSP_ Error!\n");
+		return 0;
+	}
 
 	DWORD dwThreadID0;
-	HANDLE CliThread = CreateThread(NULL, 0, ThreadAFunc, (LPVOID)&new_socket, 0, &dwThreadID0);
+	HANDLE CliThread = CreateThread(NULL, 0, ThreadAFunc, NULL, 0, &dwThreadID0);
 
-
-	printf("Finish!");
 	while (1){
 		Sleep(1);
 	}

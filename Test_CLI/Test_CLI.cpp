@@ -4,11 +4,7 @@
 #include "stdafx.h"
 #include "CLI.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#include <fstream>
+#include <windows.h>
 #include <time.h>
 
 #pragma comment (lib, "Ws2_32.lib")
@@ -180,7 +176,9 @@ DWORD WINAPI ThreadAFunc(void *arg)
 	return TRUE;
 }
 
-#define SEND_SIZE 1024*(1024) *10
+#define SEND_SIZE 0x1000000
+#define ROUND_TEST 0x70000
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 
@@ -194,7 +192,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	int len = 0;
 	unsigned char* val = (unsigned char*)malloc(SEND_SIZE);
 	unsigned char* val_2 = (unsigned char*)malloc(SEND_SIZE);
-	val[0] = 0xab;
+	
 	
 	BYTE checksumval = 0;
 	clock_t before;
@@ -203,8 +201,12 @@ int _tmain(int argc, _TCHAR* argv[])
 		printf("ROUND:%d\n", i);
 
 		fd_data = NetCon("localhost", "5557");
+		if (fd_data == -1){
+			printf("NetCon fail \n");
+			return 0;
+		}
 
-		for (n = 0; n < 300; n++){
+		for (n = 0; n < ROUND_TEST; n++){
 			val[n] = n;
 		}
 	//	getDataRSP_(fd_data, 0xa0000000, 1, (void*)val_2);
@@ -213,7 +215,18 @@ int _tmain(int argc, _TCHAR* argv[])
 	//	Sleep(1000);
 	//	getDataRSP_(fd_data, 0xa0000000, 125, (void*)val_2);
 	//	setDataRSP_(fd_data, 0xa0000000,8, (void*)val);
-	//	setDataRSP_(fd_data, 0xa0000000, 256, (void*)val);
+		/*
+		for (n = 0; n < ROUND_TEST; n+=10000){
+			before = clock();
+			setDataRSP_(fd_data, 0x82000000, n, (void*)val);
+			result = (double)(clock() - before) / CLOCKS_PER_SEC;
+			printf("WR>ROUND(%08x) TIME : %f , Byte per Second %f \n", n, result, (double)(n) / result);
+		}
+		*/
+		if(setDataRSP_(fd_data, 0x82000000, ROUND_TEST, (void*)val) == -1){
+			printf("setDataRSP_ fail \n");
+		}
+
 #if 0
 		before = clock();
 
@@ -231,13 +244,20 @@ int _tmain(int argc, _TCHAR* argv[])
 #else
 
 
-#define ROUND_TEST 1024*1024
+		unsigned int err_cnt = 0;
 		before = clock();
-		for (n = 0; n < ROUND_TEST; n++){
+		for (n = 1; n < ROUND_TEST; n+=10000){
 			before = clock();
-			getDataRSP_(fd_data, 0xa0000000, n, (void*)val_2);
+			if (getDataRSP_(fd_data, 0x82000000, n, (void*)val_2) == -1){
+				printf("getDataRSP_ fail \n");
+			}
 			result = (double)(clock() - before) / CLOCKS_PER_SEC;
-			printf("TIME : %f , Byte per Second %f \n", result, (double)(n) / result);
+			printf("ROUND(%08x) TIME : %f , Byte per Second %f \n",n ,result, (double)(n) / result);
+			if (memcmp(val, val_2, n) != 0){
+				printf("Error%d round %d \n", err_cnt, n);
+				err_cnt++;
+
+			}
 		}
 		
 #endif
