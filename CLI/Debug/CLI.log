@@ -1,4 +1,4 @@
-﻿빌드 시작: 2019-05-22 오전 11:28:06
+﻿빌드 시작: 2019-05-27 오후 1:44:14
      1>2 노드의 "D:\EYENIX\DEV\JTAG_Lib\CLI_new\CLI_\CLI\CLI.vcxproj" 프로젝트(Rebuild 대상)입니다.
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D CLI_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"stdafx.h" /Fp"Debug\CLI.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
@@ -24,13 +24,13 @@
                  c:\program files (x86)\microsoft visual studio 12.0\vc\include\stdio.h(356) : 'sprintf' 선언을 참조하십시오.
      1>d:\eyenix\dev\jtag_lib\cli_new\cli_\cli\cli.cpp(339): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
                  c:\program files (x86)\microsoft visual studio 12.0\vc\include\stdio.h(356) : 'sprintf' 선언을 참조하십시오.
-     1>d:\eyenix\dev\jtag_lib\cli_new\cli_\cli\cli.cpp(406): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+     1>d:\eyenix\dev\jtag_lib\cli_new\cli_\cli\cli.cpp(400): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
                  c:\program files (x86)\microsoft visual studio 12.0\vc\include\stdio.h(356) : 'sprintf' 선언을 참조하십시오.
-     1>d:\eyenix\dev\jtag_lib\cli_new\cli_\cli\cli.cpp(414): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+     1>d:\eyenix\dev\jtag_lib\cli_new\cli_\cli\cli.cpp(408): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
                  c:\program files (x86)\microsoft visual studio 12.0\vc\include\stdio.h(356) : 'sprintf' 선언을 참조하십시오.
-     1>d:\eyenix\dev\jtag_lib\cli_new\cli_\cli\cli.cpp(500): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+     1>d:\eyenix\dev\jtag_lib\cli_new\cli_\cli\cli.cpp(486): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
                  c:\program files (x86)\microsoft visual studio 12.0\vc\include\stdio.h(356) : 'sprintf' 선언을 참조하십시오.
-     1>d:\eyenix\dev\jtag_lib\cli_new\cli_\cli\cli.cpp(512): warning C4018: '<' : signed 또는 unsigned가 일치하지 않습니다.
+     1>d:\eyenix\dev\jtag_lib\cli_new\cli_\cli\cli.cpp(498): warning C4018: '<' : signed 또는 unsigned가 일치하지 않습니다.
          코드를 생성하고 있습니다...
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D CLI_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt dllmain.cpp
          dllmain.cpp
@@ -45,4 +45,4 @@
 
 빌드했습니다.
 
-경과 시간: 00:00:02.36
+경과 시간: 00:00:01.16

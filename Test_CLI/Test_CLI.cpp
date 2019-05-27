@@ -246,7 +246,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 		unsigned int err_cnt = 0;
 		before = clock();
-		for (n = 1; n < ROUND_TEST; n+=10000){
+		for (n = 1; n < ROUND_TEST; n+=0x1000){
 			before = clock();
 			if (getDataRSP_(fd_data, 0x82000000, n, (void*)val_2) == -1){
 				printf("getDataRSP_ fail \n");

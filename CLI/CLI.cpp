@@ -370,13 +370,7 @@ CLI_API int getDataRSP_(int fd, int addr, unsigned int size, void* value)
 			}
 			recvP += iResult;
 		}
-		else{
-			printf("Error getDataRSP_ recv %d", iResult);
-			free(buf);
-			free(buf_new);
-			free(recvbuf);
-			return -1;
-		}
+		
 
 		Sleep(1);
 	}
@@ -444,15 +438,7 @@ CLI_API int setDataRSP_(int fd, int addr, unsigned int size, void* value)
 			}
 			recvP += iResult;
 		}
-		else{
-
-			printf("Error setDataRSP_ recv %d", iResult);
-			free(msgbuf);
-			free(buf_new);
-			free(databuf);
-			free(recvbuf);
-			return -1;
-		}
+		
 
 		Sleep(1);
 	}
