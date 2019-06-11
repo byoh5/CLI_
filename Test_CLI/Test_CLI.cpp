@@ -255,9 +255,9 @@ int _tmain(int argc, _TCHAR* argv[])
 		
 	
 	//	sfls_sect_erase(fd_data,0);
-		continueRSP_(fd_data);
-		Sleep(100);
-		sendMsg(fd_data, "NRET");
+	//	continueRSP_(fd_data);
+	//	Sleep(100);
+	//	sendMsg(fd_data, "NRET");
 
 		unsigned int err_cnt = 0;
 
