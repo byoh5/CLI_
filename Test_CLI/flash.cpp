@@ -70,7 +70,7 @@ void sfls_init(int fd)
 	sf2.BUS_RDREG_CMD_MODE = 2;
 	sf2.BUS_RDREG_DAT_MODE = 2;
 	sf2.BUS_GAP_EN = 1;
-	sf2.BUS_GAP = 1; // Flash 마다 다름 Winbond 1  Eon 5 
+	sf2.BUS_GAP = 5; // Flash 마다 다름 Winbond 1  Eon 5 
 	printf("set sf2 %x \n", sf2);
 	setDataRSP_(fd, SFLS_REG_BASE + (2 << 3), REG_SIZE, &sf2);
 
