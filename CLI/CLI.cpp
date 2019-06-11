@@ -84,9 +84,9 @@ CLI_API int NetCon(char* addr, char* port)
 		}
 		break;
 	}
-#if 1
+#if 0
 	// Receive Time Out 
-	int nTimeoutValue = 5000;
+	int nTimeoutValue = 3000;
 	iResult = setsockopt(con_sock, SOL_SOCKET, SO_RCVTIMEO, (const char*)&nTimeoutValue, sizeof(nTimeoutValue));
 	if (iResult == SOCKET_ERROR) {
 		closesocket(con_sock);
@@ -96,6 +96,7 @@ CLI_API int NetCon(char* addr, char* port)
 
 	// Set the keepalive values   
 	// 
+	/*
 	DWORD         dwBytesRet = 0;
 	struct tcp_keepalive   alive;
 	alive.onoff = TRUE;
@@ -111,6 +112,7 @@ CLI_API int NetCon(char* addr, char* port)
 	printf("SIO_KEEPALIVE_VALS set:\n");
 	printf("   Keepalive Time     = %lu\n", alive.keepalivetime);
 	printf("   Keepalive Interval = %lu\n", alive.keepaliveinterval);
+	*/
 #endif
 
 	freeaddrinfo(result);
@@ -426,7 +428,7 @@ CLI_API int setDataRSP_(int fd, int addr, unsigned int size, void* value)
 
 		if (iResult > 0){
 			recvP[iResult] = 0;
-//			printf("RECV[%s]\n", recvP);
+			printf("RECV[%s]\n", recvP);
 			if ((start = strchr(recvbuf, 'O')) && (start = strchr(recvbuf, 'K'))){
 				send(fd, "+", 1, 0);
 				recvP[0] = 0;
@@ -450,6 +452,92 @@ CLI_API int setDataRSP_(int fd, int addr, unsigned int size, void* value)
 	free(recvbuf);
 	return 0;
 }
+
+
+CLI_API int resetRSP_(int fd)
+{
+	clock_t before;
+	double result;
+	before = clock();
+	char* msgbuf = (char*)malloc( SENDMSGBUF);
+	char* buf_new = (char*)malloc(SENDMSGBUF);
+	char* databuf = (char*)malloc(SENDMSGBUF);
+
+	sprintf(msgbuf, "R");
+	//	
+	int len = 0;
+	int checksumval = 0;
+	len = strlen(msgbuf);
+
+	checksumval = check_sum_256(msgbuf, strlen(msgbuf));
+
+	sprintf(buf_new, "$%s#%02x", msgbuf, checksumval);
+
+	send(fd, buf_new, strlen(buf_new), 0);
+
+	free(msgbuf);
+	free(buf_new);
+	free(databuf);
+
+	return 0;
+}
+
+CLI_API int continueRSP_(int fd)
+{
+	clock_t before;
+	double result;
+	before = clock();
+	char* msgbuf = (char*)malloc(SENDMSGBUF);
+	char* buf_new = (char*)malloc(SENDMSGBUF);
+	char* databuf = (char*)malloc(SENDMSGBUF);
+
+	sprintf(msgbuf, "C");
+	//	
+	int len = 0;
+	int checksumval = 0;
+	len = strlen(msgbuf);
+
+	checksumval = check_sum_256(msgbuf, strlen(msgbuf));
+
+	sprintf(buf_new, "$%s#%02x", msgbuf, checksumval);
+
+	send(fd, buf_new, strlen(buf_new), 0);
+
+	free(msgbuf);
+	free(buf_new);
+	free(databuf);
+
+	return 0;
+}
+
+CLI_API int NoreturnRSP_(int fd)
+{
+	clock_t before;
+	double result;
+	before = clock();
+	char* msgbuf = (char*)malloc(SENDMSGBUF);
+	char* buf_new = (char*)malloc(SENDMSGBUF);
+	char* databuf = (char*)malloc(SENDMSGBUF);
+
+	sprintf(msgbuf, "ma0000000,4");  // 0xa0000000 4 byte 읽어오는 message 
+	//	
+	int len = 0;
+	int checksumval = 0;
+	len = strlen(msgbuf);
+
+	checksumval = check_sum_256(msgbuf, strlen(msgbuf));
+
+	sprintf(buf_new, "$%s#%02x", msgbuf, checksumval);
+
+	send(fd, buf_new, strlen(buf_new), 0);
+	printf("send noretrun message to OCD\n");
+	free(msgbuf);
+	free(buf_new);
+	free(databuf);
+
+	return 0;
+}
+
 
 int AckFromRemote(int fd, char* str)
 {

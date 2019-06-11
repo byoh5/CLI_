@@ -97,10 +97,17 @@ DWORD WINAPI Thread_ReadFromOCD(void *arg)
 		
 		ret = recv(gfd_ocd, cmd, SENDSIZE-1, 0);
 
+		
+
+
 		if (ret > 0){
 			cmd[ret] = 0;
-			//			printf("OCD -> %s -> ECM\n", cmd);
+						printf("OCD -> %s -> ECM\n", cmd);
 			send(cli_fd, cmd, ret, 0);
+		}
+		else{
+		//	printf("TIME OUT %d \n",ret);
+		//	break;
 		}
 
 		if (strchr(cmd, '#')){		// 메세지 종료 처리 -> OCD로부터 더이상 받을 데이터가 없음 , 쓰레드 종료 				
@@ -111,7 +118,7 @@ DWORD WINAPI Thread_ReadFromOCD(void *arg)
 		Sleep(1);
 
 	}
-	//	printf("Kill Thread_ReadFromOCD\n");
+		printf("Kill Thread_ReadFromOCD (%08x) \n",cli_fd);
 	return 0;
 
 }
@@ -126,9 +133,9 @@ DWORD WINAPI Thread_ReadFromECM(void *arg)
 	int ret;
 	char cmd[SENDSIZE];
 	DWORD dwThreadID0_B;
-	static int sritical = 0;
+	static int critical = 0;
 
-	sritical = 0;
+	critical = 0;
 
 	while (1)
 	{
@@ -141,10 +148,26 @@ DWORD WINAPI Thread_ReadFromECM(void *arg)
 			cmd[ret] = 0;
 
 			if ((cmd[0] == 'E' && cmd[1] == 'X' && cmd[2] == 'I' && cmd[3] == 'T') || \
-				(cmd[0] == 'e' && cmd[1] == 'x' && cmd[2] == 'i' && cmd[3] == 't')){								// 소켓 종료 For escape EX) exit EXIT				
+				(cmd[0] == 'e' && cmd[1] == 'x' && cmd[2] == 'i' && cmd[3] == 't')){								// 소켓 종료 For escape EX) exit EXIT			
+				
+				if (critical){
+					critical = 0;
+					printf("Critical %d \n", critical);
+					LeaveCriticalSection(&CriticalSection);															// 종료시까지 critical이 종료되지 않았다면 강제종료 
+				}
 				closesocket(cli_fd);
 				printf("Socket closed(%d)!\n", cli_fd);
 				break;
+			}
+			if ((cmd[0] == 'N' && cmd[1] == 'R' && cmd[2] == 'E' && cmd[3] == 'T')){								// Socket을 유지하면서 Critical clear 하기위한 처리  			
+
+				if (critical){
+					critical = 0;
+					printf("Critical %d \n", critical);
+					LeaveCriticalSection(&CriticalSection);															// 종료시까지 critical이 종료되지 않았다면 강제종료 
+				}
+				continue;																							// RSP 메세지가 아니기때문에  받은후 반드시 continue 해야 함. 
+			
 			}
 			if ((strchr(cmd, '$')) && (strchr(cmd, '#')) && (strchr(cmd, '+'))){									// ECM으로부터 데이터가 올때 +$m~~~~~# 으로 붙어올때 처리, Critical 조건을 그냥 pass  
 				HANDLE CliThread_B = CreateThread(NULL, 0, Thread_ReadFromOCD, (LPVOID)&cli_fd, 0, &dwThreadID0_B);
@@ -155,13 +178,13 @@ DWORD WINAPI Thread_ReadFromECM(void *arg)
 				send(gfd_ocd, cmd, ret, 0);
 				//				printf("OCD <- %s <- ECM\n", cmd);
 				LeaveCriticalSection(&CriticalSection);
-				sritical = 0;
-				printf("Critical %d \n", sritical);
+				critical = 0;
+				printf("Critical %d \n", critical);
 			}
 			else if (strchr(cmd, '$')){																			// 메세지의 처음 - EnterCritical
 				EnterCriticalSection(&CriticalSection);
-				sritical = 1;
-				printf("Critical %d \n", sritical);
+				critical = 1;
+				printf("Critical %d \n", critical);
 				HANDLE CliThread_B = CreateThread(NULL, 0, Thread_ReadFromOCD, (LPVOID)&cli_fd, 0, &dwThreadID0_B);
 				send(gfd_ocd, cmd, ret, 0);
 				//				printf("OCD <- %s <- ECM\n", cmd);
@@ -269,12 +292,12 @@ int _tmain(int argc, _TCHAR* argv[])
 	
 	if (!InitializeCriticalSectionAndSpinCount(&CriticalSection, 0x00000400)) return 0;
 
-	gfd_ocd = NetCon("localhost", "3333");
+	gfd_ocd = NetCon("localhost", "3334");
 	if (gfd_ocd == -1){
 		printf("NetCon Error!\n");
 		return 0;
 	}
-	if (getDataRSP_(gfd_ocd, 0xa0000000, 4, (void*)data) == -1){
+	if (getDataRSP_(gfd_ocd, 0xc0000000, 4, (void*)data) == -1){
 		printf("getDataRSP_ Error!\n");
 		return 0;
 	}

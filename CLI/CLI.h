@@ -26,6 +26,9 @@ extern "C" {
 	CLI_API int sendMsg(int fd, char* msg);
 	CLI_API int getDataRSP_(int fd, int addr, unsigned int size, void* value);
 	CLI_API int setDataRSP_(int fd, int addr, unsigned int size, void* value);
+	CLI_API int resetRSP_(int fd);
+	CLI_API int NoreturnRSP_(int fd);
+	CLI_API int continueRSP_(int fd);
 #ifdef __cplusplus
 }
 #endif

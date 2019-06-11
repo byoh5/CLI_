@@ -6,6 +6,7 @@
 
 #include <windows.h>
 #include <time.h>
+#include "flash.h"
 
 #pragma comment (lib, "Ws2_32.lib")
 #pragma comment (lib, "Mswsock.lib")
@@ -177,7 +178,7 @@ DWORD WINAPI ThreadAFunc(void *arg)
 }
 
 #define SEND_SIZE 0x1000000
-#define ROUND_TEST 0x70000
+#define ROUND_TEST 0x100000
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -223,10 +224,18 @@ int _tmain(int argc, _TCHAR* argv[])
 			printf("WR>ROUND(%08x) TIME : %f , Byte per Second %f \n", n, result, (double)(n) / result);
 		}
 		*/
-		if(setDataRSP_(fd_data, 0x82000000, ROUND_TEST, (void*)val) == -1){
-			printf("setDataRSP_ fail \n");
-		}
+		
 
+		
+	
+		
+	
+		
+	//	sendMsg(fd_data, "EXIT");
+	//	while (1){
+	//		Sleep(1000);
+	//	}
+		
 #if 0
 		before = clock();
 
@@ -242,26 +251,54 @@ int _tmain(int argc, _TCHAR* argv[])
 		result = (double)(clock() - before) / CLOCKS_PER_SEC;
 		printf("TIME : %f\n", result);
 #else
-
+		
+		
+	
+	//	sfls_sect_erase(fd_data,0);
+		continueRSP_(fd_data);
+		Sleep(100);
+		sendMsg(fd_data, "NRET");
 
 		unsigned int err_cnt = 0;
-		before = clock();
-		for (n = 1; n < ROUND_TEST; n+=0x1000){
+
+		for (n = 0; n < ROUND_TEST; n += 0x1000){
+
+			resetRSP_(fd_data);
+			Sleep(100);
+			sendMsg(fd_data, "NRET");
+
+			sfls_init(fd_data);
+
+			sfls_sect_erase(fd_data, n);
+			Sleep(100);
 			before = clock();
-			if (getDataRSP_(fd_data, 0x82000000, n, (void*)val_2) == -1){
-				printf("getDataRSP_ fail \n");
+
+			hexDump("READ", val, 0x10);
+
+			if (setDataRSP_(fd_data, 0xc0000000+n, 0x1000, (void*)val) == -1){
+				printf("setDataRSP_ fail \n");
+
 			}
 			result = (double)(clock() - before) / CLOCKS_PER_SEC;
-			printf("ROUND(%08x) TIME : %f , Byte per Second %f \n",n ,result, (double)(n) / result);
-			if (memcmp(val, val_2, n) != 0){
-				printf("Error%d round %d \n", err_cnt, n);
+			printf("Write - ROUND(%08x) TIME : %f , Byte per Second %f \n", n, result, (double)(n) / result);
+
+			before = clock();
+			if (getDataRSP_(fd_data, 0xc0000000+n, 0x1000, (void*)val_2) == -1){
+				printf("getDataRSP_ fail \n");
+			}
+			hexDump("READ", val_2, 0x10);
+
+			result = (double)(clock() - before) / CLOCKS_PER_SEC;
+			printf("READ - ROUND(%08x) TIME : %f , Byte per Second %f \n",n ,result, (double)(n) / result);
+			if (memcmp(val, val_2, 0x1000) != 0){
+				printf("Error%d round %x \n", err_cnt, n);
 				err_cnt++;
 
 			}
 		}
 		
 #endif
-
+		
 
 		sendMsg(fd_data, "EXIT");
 

@@ -27,12 +27,18 @@
     <ClInclude Include="..\CLI\CLI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="flash.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Test_CLI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="flash.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
