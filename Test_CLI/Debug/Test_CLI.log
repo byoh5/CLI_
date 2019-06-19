@@ -1,19 +1,12 @@
-﻿빌드 시작: 2019-06-11 오후 4:40:11
-     1>2 노드의 "D:\EYENIX\DEV\JTAG_Lib\CLI_new\CLI_\Test_CLI\Test_CLI.vcxproj" 프로젝트(Rebuild 대상)입니다.
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ID:\EYENIX\DEV\JTAG_Lib\CLI_new\CLI_\CLI/ /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"stdafx.h" /Fp"Debug\Test_CLI.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
-         stdafx.cpp
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ID:\EYENIX\DEV\JTAG_Lib\CLI_new\CLI_\CLI/ /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\Test_CLI.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt flash.cpp Test_CLI.cpp
-         Test_CLI.cpp
-         flash.cpp
-         코드를 생성하고 있습니다...
-       Link:
+﻿빌드 시작: 2019-06-11 오후 6:58:34
+     1>2 노드의 "D:\EYENIX\DEV\JTAG_Lib\CLI_new\CLI_\Test_CLI\Test_CLI.vcxproj" 프로젝트(Build 대상)입니다.
+     1>Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\EYENIX\DEV\JTAG_Lib\CLI_new\CLI_\Debug\Test_CLI.exe" /INCREMENTAL /NOLOGO /LIBPATH:D:\EYENIX\DEV\JTAG_Lib\CLI_new\CLI_\Debug CLI.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\EYENIX\DEV\JTAG_Lib\CLI_new\CLI_\Debug\Test_CLI.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\EYENIX\DEV\JTAG_Lib\CLI_new\CLI_\Debug\Test_CLI.lib" /MACHINE:X86 Debug\flash.obj
          Debug\stdafx.obj
          Debug\Test_CLI.obj
          Test_CLI.vcxproj -> D:\EYENIX\DEV\JTAG_Lib\CLI_new\CLI_\Debug\Test_CLI.exe
-     1>"D:\EYENIX\DEV\JTAG_Lib\CLI_new\CLI_\Test_CLI\Test_CLI.vcxproj" 프로젝트를 빌드했습니다(Rebuild 대상).
+     1>"D:\EYENIX\DEV\JTAG_Lib\CLI_new\CLI_\Test_CLI\Test_CLI.vcxproj" 프로젝트를 빌드했습니다(Build 대상).
 
 빌드했습니다.
 
-경과 시간: 00:00:01.94
+경과 시간: 00:00:00.19

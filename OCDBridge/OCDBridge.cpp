@@ -102,7 +102,7 @@ DWORD WINAPI Thread_ReadFromOCD(void *arg)
 
 		if (ret > 0){
 			cmd[ret] = 0;
-						printf("OCD -> %s -> ECM\n", cmd);
+//						printf("OCD -> %s -> ECM\n", cmd);
 			send(cli_fd, cmd, ret, 0);
 		}
 		else{

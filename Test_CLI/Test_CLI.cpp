@@ -261,36 +261,36 @@ int _tmain(int argc, _TCHAR* argv[])
 
 		unsigned int err_cnt = 0;
 
-		for (n = 0; n < ROUND_TEST; n += 0x1000){
-
+		for (n = 0; n < ROUND_TEST; n += 0x10000){
+			/*
 			resetRSP_(fd_data);
 			Sleep(100);
 			sendMsg(fd_data, "NRET");
-
+			*/
 			sfls_init(fd_data);
-
-			sfls_sect_erase(fd_data, n);
+			
+			sfls_block_erase(fd_data, n);
 			Sleep(100);
 			before = clock();
 
 			hexDump("READ", val, 0x10);
 
-			if (setDataRSP_(fd_data, 0xc0000000+n, 0x1000, (void*)val) == -1){
+			if (setDataRSP_(fd_data, 0xc0000000+n, 0x10000, (void*)val) == -1){
 				printf("setDataRSP_ fail \n");
 
 			}
 			result = (double)(clock() - before) / CLOCKS_PER_SEC;
-			printf("Write - ROUND(%08x) TIME : %f , Byte per Second %f \n", n, result, (double)(n) / result);
+			printf("Write - ROUND(%08x) TIME : %f , Byte per Second %f \n", n, result, (double)(0x10000) / result);
 
 			before = clock();
-			if (getDataRSP_(fd_data, 0xc0000000+n, 0x1000, (void*)val_2) == -1){
+			if (getDataRSP_(fd_data, 0xc0000000+n, 0x10000, (void*)val_2) == -1){
 				printf("getDataRSP_ fail \n");
 			}
 			hexDump("READ", val_2, 0x10);
 
 			result = (double)(clock() - before) / CLOCKS_PER_SEC;
-			printf("READ - ROUND(%08x) TIME : %f , Byte per Second %f \n",n ,result, (double)(n) / result);
-			if (memcmp(val, val_2, 0x1000) != 0){
+			printf("READ - ROUND(%08x) TIME : %f , Byte per Second %f \n", n, result, (double)(0x10000) / result);
+			if (memcmp(val, val_2, 0x10000) != 0){
 				printf("Error%d round %x \n", err_cnt, n);
 				err_cnt++;
 
