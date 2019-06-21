@@ -4,37 +4,54 @@
 #include "flash.h"
 #include <time.h>
 
-#define FLASH_TIME_OUT_SECOND 3
+#define FLASH_TIME_OUT_SECOND 100
 #define SFLS_REG_BASE 0x40500000
 #define REG_SIZE 4
 
 #define BUS_REQ 1
 #define USR_BUS_REQ 3
-UINT32 sfls_vait_for_reg_request(int fd)
+UINT32 sfls_wait_for_bus_request(int fd)
 {
 	UINT32 read = 0;
 	UINT32 err = 0;
 	clock_t start;
 	start = clock();
 	do{
-		Sleep(100);
+		//Sleep(100);
 		getDataRSP_(fd, SFLS_REG_BASE+(8<<3), REG_SIZE, &read);
 		
-		if (((clock() - start) / CLOCKS_PER_SEC) > FLASH_TIME_OUT_SECOND) return -1;
+	//	if (((clock() - start) / CLOCKS_PER_SEC) > FLASH_TIME_OUT_SECOND) return -1;
 	} while (read & (1 << BUS_REQ));
 
 	return 0;
 }
 
-#define ID_VAL 0
-UINT32 sfls_vait_for_reg_idval(int fd)
+UINT32 sfls_wait_for_user_request(int fd)
 {
 	UINT32 read = 0;
 	UINT32 err = 0;
 	clock_t start;
 	start = clock();
 	do{
-		Sleep(100);
+		//Sleep(100);
+		getDataRSP_(fd, SFLS_REG_BASE + (8 << 3), REG_SIZE, &read);
+
+		//	if (((clock() - start) / CLOCKS_PER_SEC) > FLASH_TIME_OUT_SECOND) return -1;
+	} while (read & (0x1));
+
+	return 0;
+}
+
+
+#define ID_VAL 0
+UINT32 sfls_wait_for_reg_idval(int fd)
+{
+	UINT32 read = 0;
+	UINT32 err = 0;
+	clock_t start;
+	start = clock();
+	do{
+		//Sleep(100);
 		getDataRSP_(fd, SFLS_REG_BASE + (0 << 3), REG_SIZE, &read);
 
 		if (((clock() - start) / CLOCKS_PER_SEC) > FLASH_TIME_OUT_SECOND) return -1;
@@ -45,7 +62,7 @@ UINT32 sfls_vait_for_reg_idval(int fd)
 
 void sfls_init(int fd)
 {
-	sfls_vait_for_reg_idval(fd);
+	sfls_wait_for_reg_idval(fd);
 
 	_SFLS_1 sf1;
 	getDataRSP_(fd, SFLS_REG_BASE + (1 << 3), REG_SIZE, &sf1);
@@ -90,7 +107,7 @@ void sfls_init(int fd)
 	printf("set sf8 %x \n", sf8);
 	setDataRSP_(fd, SFLS_REG_BASE + (8 << 3), REG_SIZE, &sf8);
 
-	sfls_vait_for_reg_request(fd);
+	sfls_wait_for_bus_request(fd);
 
 }
 
@@ -120,7 +137,7 @@ void sfls_write_enable(int fd)
 	printf("set sf8 %x \n", sf8);
 	setDataRSP_(fd, SFLS_REG_BASE + (8 << 3), REG_SIZE, &sf8);
 
-	sfls_vait_for_reg_request(fd);
+	sfls_wait_for_user_request(fd);
 }
 
 void sfls_sect_erase(int fd, UINT Adr)
@@ -167,7 +184,7 @@ void sfls_sect_erase(int fd, UINT Adr)
 	printf("set sf8 %x \n", sf8);
 	setDataRSP_(fd, SFLS_REG_BASE + (8 << 3), REG_SIZE, &sf8);
 
-	sfls_vait_for_reg_request(fd);
+	sfls_wait_for_user_request(fd);
 
 }
 
@@ -215,7 +232,7 @@ void sfls_block_erase(int fd, UINT Adr)
 	printf("set sf8 %x \n", sf8);
 	setDataRSP_(fd, SFLS_REG_BASE + (8 << 3), REG_SIZE, &sf8);
 
-	sfls_vait_for_reg_request(fd);
+	sfls_wait_for_user_request(fd);
 
 }
 
@@ -256,7 +273,7 @@ void sfls_chip_erase(int fd)
 	printf("set sf8 %x \n", sf8);
 	setDataRSP_(fd, SFLS_REG_BASE + (8 << 3), REG_SIZE, &sf8);
 
-	sfls_vait_for_reg_request(fd);
+	sfls_wait_for_user_request(fd);
 
 }
 

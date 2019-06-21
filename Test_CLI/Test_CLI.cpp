@@ -268,9 +268,16 @@ int _tmain(int argc, _TCHAR* argv[])
 			sendMsg(fd_data, "NRET");
 			*/
 			sfls_init(fd_data);
+		
+			before = clock();
+			for (int k = 0; k < 100; k++){
+				sfls_sect_erase(fd_data,n);
+				printf("ERASE  : %d \n", k);
+			}
+			result = (double)(clock() - before) / CLOCKS_PER_SEC;
+			printf("ERASE TIME : %f \n", result);
 			
-			sfls_block_erase(fd_data, n);
-			Sleep(100);
+			//Sleep(100);
 			before = clock();
 
 			hexDump("READ", val, 0x10);

@@ -1,4 +1,4 @@
-﻿빌드 시작: 2019-05-27 오후 1:44:31
+﻿빌드 시작: 2019-06-21 오후 3:06:34
      1>2 노드의 "D:\EYENIX\DEV\JTAG_Lib\CLI_new\CLI_\OCDBridge\OCDBridge.vcxproj" 프로젝트(Rebuild 대상)입니다.
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ID:\EYENIX\DEV\JTAG_Lib\CLI_new\CLI_\CLI /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yc"stdafx.h" /Fp"Release\OCDBridge.pch" /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
@@ -15,4 +15,4 @@
 
 빌드했습니다.
 
-경과 시간: 00:00:00.75
+경과 시간: 00:00:01.68
